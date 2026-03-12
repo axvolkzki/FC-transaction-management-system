@@ -51,6 +51,27 @@ function writeTransactions(transactions) {
 app.get("/transactions", (req, res) => {
   let transactions = readTransactions();
 
+    const { status, from, to, search } = req.query;
+
+    if (status) {
+        transactions = transactions.filter((t) => t.Status.toLowerCase() === status.toLowerCase());
+    }
+
+    if (from) {
+        transactions = transactions.filter((t) => new Date(t["Transaction Date"]) >= new Date(from));
+    }
+
+    if (to) {
+        transactions = transactions.filter((t) => new Date(t["Transaction Date"]) <= new Date(to));
+    }
+
+    if (search) {
+        const q = search.toLowerCase();
+        transactions = transactions.filter(
+            (t) => t["Account Holder Name"].toLowerCase().includes(q) || t["Account Number"].toLowerCase().includes(q)
+        );
+    }
+
   res.json(transactions);
 });
 
