@@ -1,5 +1,5 @@
 import Papa from "papaparse";
-import sampleCsv from "./sample.csv?raw";
+import sampleCsv from "../../../shared/transactions.sample.csv?raw";
 
 // Parse CSV once
 const raw = Papa.parse(sampleCsv, { header: true, skipEmptyLines: true });
