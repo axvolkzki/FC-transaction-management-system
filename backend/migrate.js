@@ -18,5 +18,5 @@ const migratedTransactions = records.map((r) => ({
   id: r.id && r.id.trim() !== "" ? r.id : uuidv4() // Generate a unique ID if not present
 }));
 
-fs.writeFileSync(CSV_FILE, stringify(migratedTransactions, { header: true, columns: [...CSV_HEADERS, "id"] })); // Add 'id' to headers
+fs.writeFileSync(CSV_FILE, stringify(migratedTransactions, { header: true, columns: ["id", ...CSV_HEADERS] })); // Add 'id' to headers
 console.log(`Migration completed. Migrated ${migratedTransactions.length} transactions with unique IDs.`);
