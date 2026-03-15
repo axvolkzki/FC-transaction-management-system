@@ -75,7 +75,8 @@ app.get("/transactions", (req, res) => {
     const q = search.toLowerCase();
     transactions = transactions.filter((t) =>
       t["Account Holder Name"].toLowerCase().includes(q) ||
-      t["Account Number"].toLowerCase().includes(q)
+      t["Account Number"].toLowerCase().includes(q) ||
+      t["Amount"].toLowerCase().includes(q)
     );
   }
 
