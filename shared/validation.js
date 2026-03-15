@@ -1,4 +1,4 @@
-export const VALID_STATUSES = ["Pending", "Settled", "Failed"];
+export const VALID_STATUSES = ["pending", "settled", "failed"];
 export const ACCOUNT_NUMBER_REGEX = /^\d{4}-\d{4}-\d{4}$/;
 
 export function validateTransaction(data) {
