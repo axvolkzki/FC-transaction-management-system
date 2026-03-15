@@ -1,0 +1,27 @@
+const VALID_STATUSES = ["pending", "settled", "failed"];
+const ACCOUNT_NUMBER_REGEX = /^\d{4}-\d{4}-\d{4}$/;
+
+function validateTransaction(data) {
+    const { transaction_date, account_number, account_holder_name, amount, status } = data;
+    const errors = [];
+
+    if (!transaction_date)          errors.push("Transaction date is required.");
+    if (!account_number)            errors.push("Account number is required.");
+    if (!account_holder_name)       errors.push("Account holder name is required.");
+    if (!amount)                    errors.push("Amount is required.");
+    if (!status)                    errors.push("Status is required.");
+
+    if (account_number && !ACCOUNT_NUMBER_REGEX.test(account_number)) errors.push("Account number must be in the format XXXX-XXXX-XXXX.");
+    
+    if (amount && (isNaN(amount) || parseFloat(amount) <= 0)) errors.push("Amount must be a positive number.");
+    
+    if (status && !VALID_STATUSES.includes(status)) errors.push("Invalid status.");
+
+    return errors;
+}
+
+module.exports = {
+    validateTransaction,
+    VALID_STATUSES,
+    ACCOUNT_NUMBER_REGEX
+};

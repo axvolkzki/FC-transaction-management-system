@@ -11,6 +11,7 @@ const { time, timeStamp } = require("console");
 const app = express();
 const PORT = 3001;
 const CSV_FILE = path.join(__dirname, "transactions.csv");
+const { validateTransaction } = require("@transaction/shared/validation");
 
 app.use(cors());
 app.use(express.json());
@@ -84,12 +85,11 @@ app.get("/transactions", (req, res) => {
 app.post("/transactions", (req, res) => {
   const { transaction_date, account_number, account_holder_name, amount, status } = req.body;
   
-  if (!transaction_date || !account_number || !account_holder_name || !amount || !status) {
-    return res.status(400).json({ error: "All fields are required: Transaction Date, Account Number, Account Holder Name, Amount, Status" });
-  }
+  // Validate input
+  const errors = validateTransaction(req.body);
 
-  if (!["Pending", "Settled", "Failed"].includes(status)) {
-    return res.status(400).json({ error: "Invalid status. Must be one of: Pending, Settled, Failed" });
+  if (errors.length > 0) {
+    return res.status(400).json({ errors });
   }
 
   const newTransaction = {
