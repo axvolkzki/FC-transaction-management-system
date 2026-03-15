@@ -33,23 +33,27 @@ git --version
 
 ## Installation
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/axvolkzki/FC-transaction-management-system.git
+1. Clone the repository
+    ```bash
+    git clone https://github.com/axvolkzki/FC-transaction-management-system.git
+    ```
 
-# 2. Navigate into the project
-cd FC-transaction-management-system
+2. Navigate into the project
+    ```bash
+    cd FC-transaction-management-system
+    ```
 
-# 3. Install all dependencies (backend + frontend + shared)
-npm install
+3. Install all dependencies (backend + frontend + shared)
+    ```bash
+    npm install
+    ```
+    > **Note:** A single `npm install` from the root installs everything — no need to run it separately inside `backend/` or `frontend/`.
 
-# 4. Setup the initial sample data
-npm run setup
-```
-
-> **Note:** A single `npm install` from the root installs everything — no need to run it separately inside `backend/` or `frontend/`.
-
-> > **Note:** `npm run setup` copies `transactions.sample.csv` to `transactions.csv` as the initial dataset, then runs `migrate.js` to ensure every existing record has a cryptographically secure, version 4 UUID (Universally Unique Identifier). Only needs to be run **once** on first setup.
+4. Setup the initial sample data
+    ```bash
+    npm run setup
+    ```
+    > **Note:** `npm run setup` copies `transactions.sample.csv` to `transactions.csv` as the initial dataset, then runs `migrate.js` to ensure every existing record has a cryptographically secure, version 4 UUID (Universally Unique Identifier). Only needs to be run **once** on first setup.
 
 ---
  
@@ -185,7 +189,7 @@ curl -i http://localhost:3001/transactions
 
 ## Documentation
 
-See [`FC-Transaction-System-Documentation.docx`](./FC-Transaction-System-Documentation.docx) for full technical documentation including detailed API reference, architecture overview, and troubleshooting guide.
+See [`FC-Transaction-System-Documentation.pdf`](./FC-Transaction-System-Documentation.docx) for full technical documentation including detailed API reference, architecture overview, and troubleshooting guide.
 
 ---
 
