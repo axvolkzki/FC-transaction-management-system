@@ -5,13 +5,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { parse } from "csv-parse/sync";
 import { stringify } from "csv-stringify/sync";
-import PDFDocument from "pdfkit";
 import { validateTransaction } from "@transaction/shared";
 import { v4 as uuidv4 } from "uuid";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 
 const app = express();
 const PORT = 3001;
@@ -55,8 +53,8 @@ function writeTransactions(transactions) {
   fs.writeFileSync(CSV_FILE, csv);
 }
 
-// --- Routes ---
 
+// --- Routes ---
 // GET /transactions - list all transactions with optional filters
 app.get("/transactions", (req, res) => {
   let transactions = readRawTransactions();
@@ -95,16 +93,6 @@ app.get("/transactions", (req, res) => {
   }));
 
   res.json(normalized);
-});
-
-// GET /transactions/ExcelReport - export the transactions as an Excel report (CSV format)
-app.get("/transactions/ExcelReport", (req, res) => {
-  const transactions = readTransactions();
-  const csv = stringify(transactions, { header: true, columns: CSV_HEADERS });
-
-  res.setHeader("Content-Disposition", "attachment; filename=transactions_report_" + new Date().toISOString() + ".csv");
-  res.setHeader("Content-Type", "text/csv");
-  res.send(csv);
 });
 
 // POST /transactions - add a new transaction

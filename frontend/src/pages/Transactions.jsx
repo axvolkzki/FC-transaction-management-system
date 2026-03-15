@@ -30,9 +30,6 @@ export default function Transactions() {
       );
       const res = await api.get(`/transactions?${params}`);
       
-      // Sort by date descending
-      // const sorted = res.sort((a, b) => new Date(b.transaction_date) - new Date(a.transaction_date));
-
       setTransactions(res);
     } catch (err) {
       console.error("Failed to fetch transactions:", err);
@@ -43,7 +40,7 @@ export default function Transactions() {
 
   useEffect(() => {
     getTransactions();
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   }, [filters, pageSize]);
 
   const handleSubmit = async () => {
@@ -144,7 +141,6 @@ export default function Transactions() {
             </div>
             {error && <div className="form-error">{error}</div>}
             <div className="form-grid">
-              {/* Setting max to today to prevent future dates */}
               <label>Transaction Date
                 <input type="date" max={new Date().toISOString().split("T")[0]} value={form.transaction_date} onChange={(e) => setForm((f) => ({ ...f, transaction_date: e.target.value }))} />
               </label>

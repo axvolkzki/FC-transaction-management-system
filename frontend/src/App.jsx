@@ -9,12 +9,6 @@ import ThemeToggle from "./components/ThemeToggle";
 
 export default function App() {
   const { theme, toggleTheme } = useTheme();
-  
-  
-  // const handleExport = (type) => {
-  //   const filename = type === "pdf" ? "transactions-report.pdf" : "transactions.csv";
-  //   api.download(`/export/${type}`, filename);
-  // };
 
   return (
     <div className="app-layout">
@@ -43,19 +37,6 @@ export default function App() {
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
           </div>
         </div>
-
-        {/* Future feature: export transactions as CSV or PDF */}
-        {/* <div className="export-section">
-          <p className="export-label">Export</p>
-          <button className="export-btn" onClick={() => handleExport("csv")}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            CSV
-          </button>
-          <button className="export-btn" onClick={() => handleExport("pdf")}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            PDF
-          </button>
-        </div> */}
       </aside>
       <main className="main-content">
         <Routes>
