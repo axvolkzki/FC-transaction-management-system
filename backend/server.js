@@ -1,12 +1,16 @@
-const express = require("express");
-const cors = require("cors");
-const fs = require("fs");
-const path = require("path");
-const { parse } = require("csv-parse/sync");
-const { stringify } = require("csv-stringify/sync");
-const PDFDocument = require("pdfkit");
-const { v4: uuidv4 } = require("uuid");
-const { time, timeStamp } = require("console");
+import express from "express";
+import cors from "cors";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { parse } from "csv-parse/sync";
+import { stringify } from "csv-stringify/sync";
+import PDFDocument from "pdfkit";
+import { validateTransaction } from "@transaction/shared";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 const app = express();
 const PORT = 3001;
