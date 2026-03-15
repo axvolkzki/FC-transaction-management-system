@@ -117,7 +117,7 @@
 }
 
 .badge { padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-.badge-completed { background: rgba(61,255,160,0.1); color: var(--green); }
+.badge-settled { background: rgba(61,255,160,0.1); color: var(--green); }
 .badge-pending { background: rgba(255,211,106,0.1); color: #ffd36a; }
 .badge-failed { background: rgba(255,95,126,0.1); color: var(--red); }
 
