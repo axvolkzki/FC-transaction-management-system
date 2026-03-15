@@ -69,7 +69,7 @@ export default function Transactions() {
         />
         <select className="filter-select" value={filters.status} onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}>
           <option value="">All Statuses</option>
-          <option value="completed">Completed</option>
+          <option value="settled">Settled</option>
           <option value="pending">Pending</option>
           <option value="failed">Failed</option>
         </select>
@@ -99,7 +99,7 @@ export default function Transactions() {
                   <td>{t.account_number}</td>
                   <td>{t.account_holder_name}</td>
                   <td className={t.amount >= 0 ? "positive" : "negative"}>{fmt(t.amount)}</td>
-                  <td className={`status-${t.status}`}>{t.status}</td>
+                  <td className={`badge badge-${t.status}`}>{t.status}</td>
                 </tr>
               ))}
             </tbody>
@@ -132,7 +132,7 @@ export default function Transactions() {
               </label>
               <label>Status
                 <select value={form.status} onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}>
-                  <option value="completed">Completed</option>
+                  <option value="settled">Settled</option>
                   <option value="pending">Pending</option>
                   <option value="failed">Failed</option>
                 </select>
