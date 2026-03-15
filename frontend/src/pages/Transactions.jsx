@@ -2,10 +2,10 @@ import { use, useEffect, useState } from "react";
 import { api } from "../api";
 import "./Transactions.css";
 
-const STATUS = ["Pending", "Settled", "Failed"];
 const fmt = (n) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
 
-const emptyForm = { transaction_date: "", account_number: "", account_holder_name: "", amount: "", status: "Pending" };
+const emptyForm = { transaction_date: "", account_number: "", account_holder_name: "", amount: "", status: "" };
+const { validateTransaction, VALID_STATUSES } = use("@transaction/shared/validation");
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState([]);
@@ -36,8 +36,11 @@ export default function Transactions() {
 
   const handleSubmit = async () => {
     setError("");
-    if (!form.account_holder_name || !form.amount) { setError("Account holder name and amount are required."); return; }
-    if (isNaN(form.amount) || parseFloat(form.amount) <= 0) { setError("Amount must be a positive number."); return; }
+    const errors = validateTransaction(form);
+    if (errors.length > 0) {
+      setError(errors.join(" "));
+      return;
+    }
 
     await api.post("/transactions", form);
     
@@ -69,9 +72,11 @@ export default function Transactions() {
         />
         <select className="filter-select" value={filters.status} onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}>
           <option value="">All Statuses</option>
-          <option value="settled">Settled</option>
-          <option value="pending">Pending</option>
-          <option value="failed">Failed</option>
+          {VALID_STATUSES.map((status) => (
+            <option key={status} value={status}>
+              {status.charAt(0).toUpperCase() + status.slice(1)}
+            </option>
+          ))}
         </select>
         {(filters.status || filters.search) && (
           <button className="clear-btn" onClick={() => setFilters({ status: "", search: "" })}>Clear</button>
@@ -132,8 +137,9 @@ export default function Transactions() {
               </label>
               <label>Status
                 <select value={form.status} onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}>
-                  <option value="settled">Settled</option>
+                  <option value="" disabled>Select Status</option>
                   <option value="pending">Pending</option>
+                  <option value="settled">Settled</option>
                   <option value="failed">Failed</option>
                 </select>
               </label>
