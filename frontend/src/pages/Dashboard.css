@@ -1,0 +1,74 @@
+.dashboard { max-width: 1100px; }
+
+.page-header { margin-bottom: 28px; }
+.page-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+.subtitle { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+.loading {
+  display: flex; align-items: center; justify-content: center;
+  height: 300px; color: var(--muted); font-size: 15px;
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s;
+}
+.stat-card:hover { border-color: var(--accent); }
+
+.stat-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+.stat-value { font-size: 24px; font-weight: 800; font-family: var(--font-mono); letter-spacing: -1px; }
+.positive { color: var(--green); }
+.negative { color: var(--red); }
+.neutral { color: var(--accent); }
+
+.charts-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.chart-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 18px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+
+.empty-chart { color: var(--muted); font-size: 14px; text-align: center; padding: 40px 0; }
+
+.recent-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+}
+.recent-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 18px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+
+.mini-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.mini-table th { text-align: left; color: var(--muted); font-weight: 600; padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 12px; }
+.mini-table td { padding: 10px 12px; border-bottom: 1px solid rgba(42,42,61,0.5); }
+.mini-table tr:last-child td { border-bottom: none; }
+.mini-table tr:hover td { background: rgba(124,106,255,0.04); }
+
+.mono { font-family: var(--font-mono); }
+.tag { background: var(--surface2); border: 1px solid var(--border); padding: 2px 8px; border-radius: 20px; font-size: 11px; }
+.badge { padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.badge-completed { background: rgba(61,255,160,0.1); color: var(--green); }
+.badge-pending { background: rgba(255,211,106,0.1); color: #ffd36a; }
+.badge-failed { background: rgba(255,95,126,0.1); color: var(--red); }
