@@ -89,13 +89,14 @@ app.get("/transactions", (req, res) => {
 app.post("/transactions", (req, res) => {
   const { transaction_date, account_number, account_holder_name, amount, status } = req.body;
   
-  // Validate input
-  const errors = validateTransaction(req.body);
+  const errors = validateTransaction(req.body); // Validate the incoming transaction data
 
+  // If there are validation errors, return a 400 Bad Request with the error messages
   if (errors.length > 0) {
     return res.status(400).json({ errors });
   }
 
+  // Create a new transaction object with a unique ID and the provided data
   const newTransaction = {
     "id": uuidv4(), // Generate a unique ID for the transaction
     "Transaction Date": transaction_date,
