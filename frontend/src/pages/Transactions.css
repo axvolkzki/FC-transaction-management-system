@@ -172,4 +172,8 @@
 .form-grid input:focus, .form-grid select:focus { border-color: var(--accent); }
 .form-grid select option { background: var(--surface2); }
 
+.form-control pending { border-color: rgba(255,211,106,0.5); }
+.form-control settled { border-color: rgba(61,255,160,0.5); }
+.form-control failed { border-color: rgba(255,95,126,0.5); }
+
 .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
