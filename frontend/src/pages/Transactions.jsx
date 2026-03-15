@@ -91,7 +91,6 @@ export default function Transactions() {
                   <td>{t.account_number}</td>
                   <td>{t.account_holder_name}</td>
                   <td className={t.amount >= 0 ? "positive" : "negative"}>{fmt(t.amount)}</td>
-                  {/* Pending - yellow, Settled - green, Failed - red */}
                   <td className={`status-${t.status}`}>{t.status}</td>
                 </tr>
               ))}
