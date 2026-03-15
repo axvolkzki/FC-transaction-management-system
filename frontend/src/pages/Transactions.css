@@ -117,9 +117,9 @@
 }
 
 .badge { padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-.badge-settled { background: rgba(61,255,160,0.1); color: var(--green); }
-.badge-pending { background: rgba(255,211,106,0.1); color: #ffd36a; }
-.badge-failed { background: rgba(255,95,126,0.1); color: var(--red); }
+.badge-Settled { background: rgba(61,255,160,0.1); color: var(--green); }
+.badge-Pending { background: rgba(255,211,106,0.1); color: #ffd36a; }
+.badge-Failed { background: rgba(255,95,126,0.1); color: var(--red); }
 
 .actions { display: flex; gap: 6px; }
 .action-btn { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; transition: all 0.15s; }
