@@ -1,11 +1,11 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { validateTransaction, VALID_STATUSES } from "@transaction/shared";
 import { api } from "../api";
 import "./Transactions.css";
 
 const fmt = (n) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
 
 const emptyForm = { transaction_date: "", account_number: "", account_holder_name: "", amount: "", status: "" };
-const { validateTransaction, VALID_STATUSES } = use("@transaction/shared/validation");
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState([]);
