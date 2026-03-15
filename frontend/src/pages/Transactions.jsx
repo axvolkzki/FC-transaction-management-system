@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { validateTransaction, VALID_STATUSES } from "@transaction/shared";
 import { api } from "../api";
+// import { mockAPI as api } from "../mock/mockAPI";    // for testing with mock data without backend
 import "./Transactions.css";
+import Pagination from "../components/Pagination";
 
 const fmt = (n) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
 
@@ -14,6 +16,11 @@ export default function Transactions() {
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState("");
   const [filters, setFilters] = useState({ status: "", search: "" });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const totalPages = Math.ceil(transactions.length / pageSize);
+  const paginatedTransactions = transactions.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
 
   const getTransactions = async () => {
     setLoading(true);
@@ -22,6 +29,10 @@ export default function Transactions() {
         Object.fromEntries(Object.entries(filters).filter(([, v]) => v))
       );
       const res = await api.get(`/transactions?${params}`);
+      
+      // Sort by date descending
+      // const sorted = res.sort((a, b) => new Date(b.transaction_date) - new Date(a.transaction_date));
+
       setTransactions(res);
     } catch (err) {
       console.error("Failed to fetch transactions:", err);
@@ -32,7 +43,8 @@ export default function Transactions() {
 
   useEffect(() => {
     getTransactions();
-  }, [filters]);
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [filters, pageSize]);
 
   const handleSubmit = async () => {
     setError("");
@@ -81,6 +93,15 @@ export default function Transactions() {
         {(filters.status || filters.search) && (
           <button className="clear-btn" onClick={() => setFilters({ status: "", search: "" })}>Clear</button>
         )}
+
+        <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            totalItems={transactions.length}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={(size) => { setPageSize(size); setCurrentPage(1); }}
+          />
       </div>
 
       {/* Table */}
@@ -98,7 +119,7 @@ export default function Transactions() {
               <tr><th>Transaction Date</th><th>Account Number</th><th>Account Holder Name</th><th>Amount</th><th>Status</th></tr>
             </thead>
             <tbody>
-              {transactions.map((t) => (
+              {paginatedTransactions.map((t) => (
                 <tr key={t.id}>
                   <td className="mono">{t.transaction_date}</td>
                   <td>{t.account_number}</td>
@@ -107,6 +128,7 @@ export default function Transactions() {
                   <td className={`badge badge-${t.status}`}>{t.status}</td>
                 </tr>
               ))}
+              
             </tbody>
           </table>
         </div>
