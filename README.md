@@ -189,7 +189,7 @@ curl -i http://localhost:3001/transactions
 
 ## Documentation
 
-See [`FC-Transaction-System-Documentation.pdf`](./FC-Transaction-System-Documentation.docx) for full technical documentation including detailed API reference, architecture overview, and troubleshooting guide.
+See [`FC-Transaction-System-Documentation.pdf`](./FC-Transaction-System-Documentation.pdf) for full technical documentation including detailed API reference, architecture overview, and troubleshooting guide.
 
 ---
 
