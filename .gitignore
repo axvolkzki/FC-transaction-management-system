@@ -4,3 +4,4 @@ node_modules/
 *.csv
 .DS_Store
 dist/
+.vite/
