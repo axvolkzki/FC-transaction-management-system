@@ -14,7 +14,6 @@ const CSV_FILE = path.join(__dirname, "transactions.csv");
 
 app.use(cors());
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true })); // To parse URL-encoded bodies
 
 // --- CSV Helpers ---
 const CSV_HEADERS = ["Transaction Date", "Account Number", "Account Holder Name", "Amount", "Status"];
@@ -88,6 +87,7 @@ app.post("/transactions", (req, res) => {
   }
 
   const newTransaction = {
+    "id": uuidv4(), // Generate a unique ID for the transaction
     "Transaction Date": transactionDate,
     "Account Number": accountNumber,
     "Account Holder Name": accountHolderName,
