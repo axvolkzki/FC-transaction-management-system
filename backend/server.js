@@ -60,29 +60,33 @@ function writeTransactions(transactions) {
 // GET /transactions - list all transactions with optional filters
 app.get("/transactions", (req, res) => {
   let transactions = readTransactions();
+  const { status, from, to, search } = req.query;
 
-    const { status, from, to, search } = req.query;
+  if (status) transactions = transactions.filter((t) => t.status.toLowerCase() === status.toLowerCase());
+  if (from) transactions = transactions.filter((t) => new Date(t["Transaction Date"]) >= new Date(from));
+  if (to) transactions = transactions.filter((t) => new Date(t["Transaction Date"]) <= new Date(to));
 
-    if (status) {
-        transactions = transactions.filter((t) => t.status.toLowerCase() === status.toLowerCase());
-    }
+  if (search) {
+    const q = search.toLowerCase();
+    transactions = transactions.filter(
+        (t) => t["Account Holder Name"].toLowerCase().includes(q) || t["Account Number"].toLowerCase().includes(q)
+    );
+  }
 
-    if (from) {
-        transactions = transactions.filter((t) => new Date(t["Transaction Date"]) >= new Date(from));
-    }
-
-    if (to) {
-        transactions = transactions.filter((t) => new Date(t["Transaction Date"]) <= new Date(to));
-    }
-
-    if (search) {
-        const q = search.toLowerCase();
-        transactions = transactions.filter(
-            (t) => t["Account Holder Name"].toLowerCase().includes(q) || t["Account Number"].toLowerCase().includes(q)
-        );
-    }
+  // Sort transactions by date descending
+  transactions.sort((a, b) => new Date(b.transaction_date) - new Date(a.transaction_date));
 
   res.json(transactions);
+});
+
+// GET /transactions/ExcelReport - export the transactions as an Excel report (CSV format)
+app.get("/transactions/ExcelReport", (req, res) => {
+  const transactions = readTransactions();
+  const csv = stringify(transactions, { header: true, columns: CSV_HEADERS });
+
+  res.setHeader("Content-Disposition", "attachment; filename=transactions_report_" + new Date().toISOString() + ".csv");
+  res.setHeader("Content-Type", "text/csv");
+  res.send(csv);
 });
 
 // POST /transactions - add a new transaction
