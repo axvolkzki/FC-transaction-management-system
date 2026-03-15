@@ -5,9 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { parse } from "csv-parse/sync";
 import { stringify } from "csv-stringify/sync";
-import PDFDocument from "pdfkit";
 import { validateTransaction } from "@transaction/shared";
-import { v4 as uuidv4 } from "uuid";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -120,7 +118,7 @@ app.post("/transactions", (req, res) => {
 
   // Create a new transaction object with a unique ID and the provided data
   const newTransaction = {
-    "id": uuidv4(), // Generate a unique ID for the transaction
+    "id": crypto.randomUUID(),
     "Transaction Date": transaction_date,
     "Account Number": account_number,
     "Account Holder Name": account_holder_name,
