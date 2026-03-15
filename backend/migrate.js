@@ -14,7 +14,7 @@ const records = parse(content, { columns: true, skip_empty_lines: true, trim: tr
 
 const migratedTransactions = records.map((r) => ({ 
   ...r, 
-  Amount: parseFloat(r.Amount).toFixed(2),
+  Amount: parseFloat(r.Amount).toFixed(2),          // Ensure amount is a string with 2 decimal places
   id: r.id && r.id.trim() !== "" ? r.id : uuidv4() // Generate a unique ID if not present
 }));
 
