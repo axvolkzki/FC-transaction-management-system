@@ -138,9 +138,9 @@ export default function Transactions() {
               <label>Status
                 <select value={form.status} onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}>
                   <option value="" disabled>Select Status</option>
-                  <option value="pending">Pending</option>
-                  <option value="settled">Settled</option>
-                  <option value="failed">Failed</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Settled">Settled</option> 
+                  <option value="Failed">Failed</option>
                 </select>
               </label>
             </div>
