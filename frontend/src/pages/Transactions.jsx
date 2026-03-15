@@ -2,10 +2,10 @@ import { use, useEffect, useState } from "react";
 import { api } from "../api";
 import "./Transactions.css";
 
-const STATUS = ["pending", "settled", "failed"];
 const fmt = (n) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
 
 const emptyForm = { transaction_date: "", account_number: "", account_holder_name: "", amount: "", status: "" };
+const { validateTransaction, VALID_STATUSES } = use("@transaction/shared/validation");
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState([]);
@@ -36,17 +36,11 @@ export default function Transactions() {
 
   const handleSubmit = async () => {
     setError("");
-    // All fields are required
-    if (!form.transaction_date || !form.account_number || !form.account_holder_name || !form.amount || !form.status) { setError("All fields are required."); return; }
-    
-    // Validate amount
-    if (isNaN(form.amount) || parseFloat(form.amount) <= 0) { setError("Amount must be a positive number."); return; }
-
-    // Validate status
-    if (!STATUS.includes(form.status)) { setError("Invalid status."); return; }
-
-    // Validate account number (basic check for format)
-    if (!/^\d{4}-\d{4}-\d{4}$/.test(form.account_number)) { setError("Account number must be in the format XXXX-XXXX-XXXX."); return; }
+    const errors = validateTransaction(form);
+    if (errors.length > 0) {
+      setError(errors.join(" "));
+      return;
+    }
 
     await api.post("/transactions", form);
     
@@ -78,9 +72,11 @@ export default function Transactions() {
         />
         <select className="filter-select" value={filters.status} onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}>
           <option value="">All Statuses</option>
-          <option value="settled">Settled</option>
-          <option value="pending">Pending</option>
-          <option value="failed">Failed</option>
+          {VALID_STATUSES.map((status) => (
+            <option key={status} value={status}>
+              {status.charAt(0).toUpperCase() + status.slice(1)}
+            </option>
+          ))}
         </select>
         {(filters.status || filters.search) && (
           <button className="clear-btn" onClick={() => setFilters({ status: "", search: "" })}>Clear</button>
