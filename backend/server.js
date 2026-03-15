@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 // --- CSV Helpers ---
-const CSV_HEADERS = ["Transaction Date", "Account Number", "Account Holder Name", "Amount", "Status"];
+const CSV_HEADERS = ["id", "Transaction Date", "Account Number", "Account Holder Name", "Amount", "Status"];
 
 // Reads transactions from the CSV file, ensuring it exists and has valid content
 function readTransactions() {
@@ -31,7 +31,14 @@ function readTransactions() {
 
   try {
     const records = parse(content, { columns: true, skip_empty_lines: true, trim: true });
-    return records.map((r) => ({ ...r, Amount: parseFloat(r.Amount).toFixed(2) }));     // Ensure Amount is a number with 2 decimal places
+    return records.map((r) => ({
+      "id": r.id || uuidv4(), // Ensure each record has a unique ID
+      "transaction_date": r["Transaction Date"],
+      "account_number": r["Account Number"],
+      "account_holder_name": r["Account Holder Name"],
+      "amount": parseFloat(r.Amount).toFixed(2),
+      "status": r["Status"]
+    }));     // Ensure Amount is a number with 2 decimal places
   } catch {
     console.error("Error parsing CSV content. Returning empty transactions list.");
     return [];
@@ -53,7 +60,7 @@ app.get("/transactions", (req, res) => {
     const { status, from, to, search } = req.query;
 
     if (status) {
-        transactions = transactions.filter((t) => t.Status.toLowerCase() === status.toLowerCase());
+        transactions = transactions.filter((t) => t.status.toLowerCase() === status.toLowerCase());
     }
 
     if (from) {
@@ -76,9 +83,9 @@ app.get("/transactions", (req, res) => {
 
 // POST /transactions - add a new transaction
 app.post("/transactions", (req, res) => {
-  const { transactionDate, accountNumber, accountHolderName, amount, status } = req.body;
+  const { transaction_date, account_number, account_holder_name, amount, status } = req.body;
   
-  if (!transactionDate || !accountNumber || !accountHolderName || !amount || !status) {
+  if (!transaction_date || !account_number || !account_holder_name || !amount || !status) {
     return res.status(400).json({ error: "All fields are required: Transaction Date, Account Number, Account Holder Name, Amount, Status" });
   }
 
@@ -88,9 +95,9 @@ app.post("/transactions", (req, res) => {
 
   const newTransaction = {
     "id": uuidv4(), // Generate a unique ID for the transaction
-    "Transaction Date": transactionDate,
-    "Account Number": accountNumber,
-    "Account Holder Name": accountHolderName,
+    "Transaction Date": transaction_date,
+    "Account Number": account_number,
+    "Account Holder Name": account_holder_name,
     "Amount": parseFloat(amount).toFixed(2),
     "Status": status
   };
