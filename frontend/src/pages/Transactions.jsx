@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { api } from "../api";
 import "./Transactions.css";
 
@@ -15,16 +15,24 @@ export default function Transactions() {
   const [error, setError] = useState("");
   const [filters, setFilters] = useState({ status: "", search: "" });
 
-  const fetchTxns = () => {
-    const params = new URLSearchParams(Object.fromEntries(Object.entries(filters).filter(([, v]) => v)));
+  const getTransactions = async () => {
     setLoading(true);
-    api.get(`/transactions?${params}`).then((data) => {
-      setTransactions(data);
+    try {
+      const params = new URLSearchParams(
+        Object.fromEntries(Object.entries(filters).filter(([, v]) => v))
+      );
+      const res = await api.get(`/transactions?${params}`);
+      setTransactions(res);
+    } catch (err) {
+      console.error("Failed to fetch transactions:", err);
+    } finally {
       setLoading(false);
-    });
+    }
   };
 
-  useEffect(() => { fetchTxns(); }, [filters]);
+  useEffect(() => {
+    getTransactions();
+  }, [filters]);
 
   const handleSubmit = async () => {
     setError("");
@@ -35,7 +43,7 @@ export default function Transactions() {
     
     setForm(emptyForm);
     setShowForm(false);
-    fetchTxns();
+    getTransactions();
   };
 
 
