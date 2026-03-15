@@ -89,14 +89,14 @@ app.get("/transactions", (req, res) => {
 app.post("/transactions", (req, res) => {
   const { transaction_date, account_number, account_holder_name, amount, status } = req.body;
   
-  if (!transaction_date || !account_number || !account_holder_name || !amount || !status) {
-    return res.status(400).json({ error: "All fields are required: Transaction Date, Account Number, Account Holder Name, Amount, Status" });
+  const errors = validateTransaction(req.body); // Validate the incoming transaction data
+
+  // If there are validation errors, return a 400 Bad Request with the error messages
+  if (errors.length > 0) {
+    return res.status(400).json({ errors });
   }
 
-  if (!["Pending", "Settled", "Failed"].includes(status)) {
-    return res.status(400).json({ error: "Invalid status. Must be one of: Pending, Settled, Failed" });
-  }
-
+  // Create a new transaction object with a unique ID and the provided data
   const newTransaction = {
     "id": uuidv4(), // Generate a unique ID for the transaction
     "Transaction Date": transaction_date,
