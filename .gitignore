@@ -1,7 +1,9 @@
 # Ignore node modules, environment variables, and other unnecessary files
 node_modules/
 .env
-*.csv
 .DS_Store
 dist/
 .vite/
+
+backend/transactions.csv
+frontend/src/mock/sample.csv
