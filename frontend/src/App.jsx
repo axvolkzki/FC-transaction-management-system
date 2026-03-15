@@ -60,7 +60,7 @@ export default function App() {
       <main className="main-content">
         <Routes>
           {/* <Route path="/" element={<Dashboard />} /> */}
-          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/" element={<Transactions />} />
         </Routes>
       </main>
     </div>
