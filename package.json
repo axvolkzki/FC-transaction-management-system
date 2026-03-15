@@ -22,7 +22,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/axvolkzki/FC-transaction-management-system/issues"
   },
