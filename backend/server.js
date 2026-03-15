@@ -59,24 +59,41 @@ function writeTransactions(transactions) {
 
 // GET /transactions - list all transactions with optional filters
 app.get("/transactions", (req, res) => {
-  let transactions = readTransactions();
+  let transactions = readRawTransactions();
   const { status, from, to, search } = req.query;
 
-  if (status) transactions = transactions.filter((t) => t.status.toLowerCase() === status.toLowerCase());
-  if (from) transactions = transactions.filter((t) => new Date(t["Transaction Date"]) >= new Date(from));
-  if (to) transactions = transactions.filter((t) => new Date(t["Transaction Date"]) <= new Date(to));
+  if (status) transactions = transactions.filter((t) => 
+    t["Status"].toLowerCase() === status.toLowerCase());
+
+  if (from) transactions = transactions.filter((t) => 
+    new Date(t["Transaction Date"]) >= new Date(from));
+
+  if (to) transactions = transactions.filter((t) => 
+    new Date(t["Transaction Date"]) <= new Date(to));
 
   if (search) {
     const q = search.toLowerCase();
-    transactions = transactions.filter(
-        (t) => t["Account Holder Name"].toLowerCase().includes(q) || t["Account Number"].toLowerCase().includes(q)
+    transactions = transactions.filter((t) =>
+      t["Account Holder Name"].toLowerCase().includes(q) ||
+      t["Account Number"].toLowerCase().includes(q)
     );
   }
 
-  // Sort transactions by date descending
-  transactions.sort((a, b) => new Date(b.transaction_date) - new Date(a.transaction_date));
+  // Sort using raw key (consistent)
+  transactions.sort((a, b) => 
+    new Date(b["Transaction Date"]) - new Date(a["Transaction Date"]));
 
-  res.json(transactions);
+  // Normalize before sending to frontend
+  const normalized = transactions.map((r) => ({
+    id: r.id,
+    transaction_date: r["Transaction Date"],
+    account_number: r["Account Number"],
+    account_holder_name: r["Account Holder Name"],
+    amount: parseFloat(r["Amount"]),
+    status: r["Status"],
+  }));
+
+  res.json(normalized);
 });
 
 // GET /transactions/ExcelReport - export the transactions as an Excel report (CSV format)
