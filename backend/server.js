@@ -18,8 +18,8 @@ app.use(express.json());
 // --- CSV Helpers ---
 const CSV_HEADERS = ["id", "Transaction Date", "Account Number", "Account Holder Name", "Amount", "Status"];
 
-// Reads transactions from the CSV file, ensuring it exists and has valid content
-function readTransactions() {
+// Reads transactions from the CSV file, ensuring it exists and has valid content (for writing back to the file)
+function readRawTransactions() {
   // If the CSV file doesn't exist, create it with headers and return an empty array
   if (!fs.existsSync(CSV_FILE)) {
     fs.writeFileSync(CSV_FILE, CSV_HEADERS.join(",") + "\n");
@@ -29,20 +29,19 @@ function readTransactions() {
   const content = fs.readFileSync(CSV_FILE, "utf-8");
   if (!content.trim() || content.trim() === CSV_HEADERS.join(",")) return [];
 
-  try {
-    const records = parse(content, { columns: true, skip_empty_lines: true, trim: true });
-    return records.map((r) => ({
-      "id": r.id || uuidv4(), // Ensure each record has a unique ID
-      "transaction_date": r["Transaction Date"],
-      "account_number": r["Account Number"],
-      "account_holder_name": r["Account Holder Name"],
-      "amount": parseFloat(r.Amount).toFixed(2),
-      "status": r["Status"]
-    }));     // Ensure Amount is a number with 2 decimal places
-  } catch {
-    console.error("Error parsing CSV content. Returning empty transactions list.");
-    return [];
-  }
+  return parse(content, { columns: true, skip_empty_lines: true, trim: true });
+}
+
+// Reads transactions and maps them to a more convenient format for the API (for frontend consumption)
+function readTransactions() {
+  return readRawTransactions().map((t) => ({
+    id: t.id,
+    transaction_date: t["Transaction Date"],
+    account_number: t["Account Number"],
+    account_holder_name: t["Account Holder Name"],
+    amount: parseFloat(t["Amount"]),
+    status: t["Status"]
+  }));
 }
 
 // Writes the given transactions array back to the CSV file
@@ -102,7 +101,7 @@ app.post("/transactions", (req, res) => {
     "Status": status
   };
 
-  const transactions = readTransactions();
+  const transactions = readRawTransactions();
   transactions.push(newTransaction);
   writeTransactions(transactions);
 
